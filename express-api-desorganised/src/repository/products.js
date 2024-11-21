@@ -1,0 +1,1 @@
+export const getAllProductsSQL = "SELECT * FROM products"
