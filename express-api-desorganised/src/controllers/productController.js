@@ -1,5 +1,5 @@
 import db from '../config/database.js';
-import { getAllProductsSQL } from '../repository/products.js';
+import { createProductSQL, deleteProductSQL, getAllProductsSQL, updateProductSQL } from '../repository/products.js';
 
 export const getAllProducts = (req, res) => {
   db.all(getAllProductsSQL, (err, rows) => {
@@ -17,8 +17,7 @@ export const createProduct = (req, res) => {
   if (!name || !price) {
     res.status(400).send('Le nom et le prix sont requis');
   } else {
-    const sql = 'INSERT INTO products(name, price) VALUES (?, ?)';
-    db.run(sql, [name, price], function (err) {
+    db.run(createProductSQL, [name, price], function (err) {
       if (err) {
         console.error(err.message);
         res.status(500).send('Erreur interne du serveur');
@@ -36,8 +35,7 @@ export const updateProduct = (req, res) => {
   if (!name || !price) {
     res.status(400).send('Le nom et le prix sont requis');
   } else {
-    const sql = 'UPDATE products SET name = ?, price = ? WHERE id = ?';
-    db.run(sql, [name, price, id], function (err) {
+    db.run(updateProductSQL, [name, price, id], function (err) {
       if (err) {
         console.error(err.message);
         res.status(500).send('Erreur interne du serveur');
@@ -52,8 +50,7 @@ export const updateProduct = (req, res) => {
 
 export const deleteProduct = (req, res) => {
   const { id } = req.params;
-  const sql = 'DELETE FROM products WHERE id = ?';
-  db.run(sql, [id], function (err) {
+  db.run(deleteProductSQL, [id], function (err) {
     if (err) {
       console.error(err.message);
       res.status(500).send('Erreur interne du serveur');
